@@ -4,14 +4,22 @@ import 'package:meals_app/components/main_drawer.dart';
 import '../models/settings.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  final Function(Settings) onSettingChanged;
+  final Settings settings;
+  const SettingsScreen(this.onSettingChanged, this.settings, {super.key});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  var settings = Settings();
+  Settings? settings;
+
+  @override
+  void initState() {
+    super.initState();
+    settings = widget.settings;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +33,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: Text(title),
         subtitle: Text(subtitle),
         value: value,
-        onChanged: onChanged,
+        onChanged: (value) {
+          onChanged(value);
+          widget.onSettingChanged(settings!);
+        },
       );
     }
 
@@ -51,26 +62,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 _createSwith(
                   'Without Gluten',
                   'Only meals without gluten',
-                  settings.isGlutenFree,
-                  (value) => setState(() => settings.isGlutenFree = value),
+                  settings!.isGlutenFree,
+                  (value) => setState(() => settings!.isGlutenFree = value),
                 ),
                 _createSwith(
                   'Without Lactose',
                   'Only meals without lactose',
-                  settings.isLactoseFree,
-                  (value) => setState(() => settings.isLactoseFree = value),
+                  settings!.isLactoseFree,
+                  (value) => setState(() => settings!.isLactoseFree = value),
                 ),
                 _createSwith(
                   'Only vegan',
                   'Only vegans meals',
-                  settings.isVegan,
-                  (value) => setState(() => settings.isVegan = value),
+                  settings!.isVegan,
+                  (value) => setState(() => settings!.isVegan = value),
                 ),
                 _createSwith(
                   'Without vegatarian',
                   'Only vegetarian meals',
-                  settings.isVegetarian,
-                  (value) => setState(() => settings.isVegetarian = value),
+                  settings!.isVegetarian,
+                  (value) => setState(() => settings!.isVegetarian = value),
                 ),
               ],
             ),
